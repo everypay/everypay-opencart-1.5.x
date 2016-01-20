@@ -97,10 +97,8 @@ class ControllerPaymentEverypay extends Controller
             }
 
             if ($success === true) {
-                $this->model_checkout_order->confirm($this->request->post['merchant_order_id'], $this->config->get('config_order_status_id'));
-
                 $message = 'Everypay transaction id: ' . $response_array['token'];
-                $this->model_checkout_order->update($this->request->post['merchant_order_id'], $this->config->get('config_order_status_id'), $message);
+                $this->model_checkout_order->confirm($this->request->post['merchant_order_id'], $this->config->get('config_order_status_id'), $message);
 
                 $this->data['continue'] = $this->url->link('checkout/success');
 
