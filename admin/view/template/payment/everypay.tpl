@@ -51,7 +51,7 @@
                         <td>
                             <select name="everypay_order_status_id" id="input-order-status" class="form-control">
                             <?php foreach ($order_statuses as $order_status) { ?>
-                            <?php if (($everypay_order_status_id and $order_status['order_status_id'] == $everypay_order_status_id) or $order_status['order_status_id'] == 2) { ?>
+                            <?php if (($everypay_order_status_id and $order_status['order_status_id'] == $everypay_order_status_id)) { ?>
                             <option value="<?php echo $order_status['order_status_id']; ?>" selected="selected"><?php echo $order_status['name']; ?></option>
                             <?php } else { ?>
                             <option value="<?php echo $order_status['order_status_id']; ?>"><?php echo $order_status['name']; ?></option>
