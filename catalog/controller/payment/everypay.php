@@ -4,6 +4,8 @@
 
 class ControllerPaymentEverypay extends Controller
 {
+    private $everypayLog;
+
     public function index()
     {
         $this->language->load('payment/everypay');
@@ -74,6 +76,8 @@ class ControllerPaymentEverypay extends Controller
                 if ($result === false) {
                     $success = false;
                     $error = 'Curl error: '.curl_error($ch);
+
+                    $this->getLog()->write($error);
                 } else {
                     $response_array = json_decode($result, true);
                     //Check success response
@@ -87,14 +91,17 @@ class ControllerPaymentEverypay extends Controller
                         } else {
                             $error = 'EVERYPAY_ERROR:Invalid Response <br/>'.$result;
                         }
+                        $this->getLog()->write($error);
                     }
                 }
+
 
                 //close connection
                 curl_close($ch);
             } catch (Exception $e) {
                 $success = false;
                 $error = 'OPENCART_ERROR:Request to EveryPay Failed';
+                $this->getLog()->write($e->__toString());
             }
 
             if ($success === true) {
@@ -102,6 +109,10 @@ class ControllerPaymentEverypay extends Controller
 
                 $message = 'Everypay transaction id: ' . $response_array['token'];
                 $this->model_checkout_order->update($this->request->post['merchant_order_id'], $this->config->get('config_order_status_id'), $message, true);
+                if ($response_array['installments_count'] > 0) {
+                    $installmentsMessage = 'Everypay installments :' . $response_array['installments_count'];
+                    $this->model_checkout_order->update($this->request->post['merchant_order_id'], $this->config->get('config_order_status_id'), $installmentsMessage, true);
+                }
 
                 $this->data['continue'] = $this->url->link('checkout/success');
 
@@ -132,7 +143,7 @@ class ControllerPaymentEverypay extends Controller
             'payee_email' => $email,
             'payee_phone' => $phone,
         );
-        if (false !== $max = $this->getInstallments($amount)) {
+        if (false !== $max = $this->getInstallments(round($amount / 100, 2))) {
             $data['max_installments'] = $max;
         }
         $fields_string =http_build_query($data);
@@ -154,7 +165,6 @@ class ControllerPaymentEverypay extends Controller
 
     private function getInstallments($total)
     {
-        $total = round($total / 100, 2);
         $inst = htmlspecialchars_decode($this->config->get('everypay_installments'));
         if ($inst) {
             $installments = json_decode($inst, true);
@@ -184,5 +194,10 @@ class ControllerPaymentEverypay extends Controller
         } else {
             $this->template = 'default/template/payment/everypay_failure.tpl';
         }
+    }
+
+    private function getLog()
+    {
+        return $this->everypayLog = $this->everypayLog ?: new Log('everypay_log_' . date('Y-m') . '.txt');
     }
 }
