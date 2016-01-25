@@ -46,6 +46,7 @@ class ControllerPaymentEverypay extends Controller
         $this->data['language'] = $this->language->get('code');
         $this->data['direction'] = $this->language->get('direction');
         $this->data['heading_title'] = sprintf($this->language->get('heading_title'), $this->config->get('config_name'));
+        $this->data['heading_failure_title'] = sprintf($this->language->get('heading_failure_title'), $this->config->get('config_name'));
         $this->data['text_response'] = $this->language->get('text_response');
         $this->data['text_success'] = $this->language->get('text_success');
         $this->data['text_success_wait'] = sprintf($this->language->get('text_success_wait'), $this->url->link('checkout/success'));
@@ -106,7 +107,7 @@ class ControllerPaymentEverypay extends Controller
 
                 $this->renderSuccess();
             } else {
-                $this->data['continue'] = $this->url->link('checkout/failure');
+                $this->data['continue'] = $this->url->link('checkout/checkout');
                 $this->renderFailure();
             }
         } else {
