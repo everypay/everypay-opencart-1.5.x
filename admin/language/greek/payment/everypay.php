@@ -17,6 +17,7 @@ $_['entry_secret_key'] = 'Secret Key';
 $_['entry_order_status'] = 'Κατάσταση παραγγελίας';
 $_['entry_status'] = 'Κατάσταση';
 $_['entry_sort_order'] = 'Σειρά Ταξινόμησης';
+$_['entry_sandbox'] = 'Δοκιμαστική Λειτουργία (Sandbox)';
 
 //tooltips
 $_['help_key_id'] = 'Το Public Key και Secret Key που υπάρχουν στην κατηγορία `Κλειδία API` στο Dashboard της Everypay. Χρησιμοποιείστε τα κλειδιά του Sandbox για δοκιμαστικες πληρωμές.';
