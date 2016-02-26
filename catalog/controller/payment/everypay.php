@@ -46,6 +46,7 @@ class ControllerPaymentEverypay extends Controller
         $this->data['language'] = $this->language->get('code');
         $this->data['direction'] = $this->language->get('direction');
         $this->data['heading_title'] = sprintf($this->language->get('heading_title'), $this->config->get('config_name'));
+        $this->data['heading_failure_title'] = $this->language->get('heading_failure_title');
         $this->data['text_response'] = $this->language->get('text_response');
         $this->data['text_success'] = $this->language->get('text_success');
         $this->data['text_success_wait'] = sprintf($this->language->get('text_success_wait'), $this->url->link('checkout/success'));
@@ -98,16 +99,16 @@ class ControllerPaymentEverypay extends Controller
             }
 
             if ($success === true) {
-                $this->model_checkout_order->confirm($this->request->post['merchant_order_id'], $this->config->get('config_order_status_id'));
+                $this->model_checkout_order->confirm($this->request->post['merchant_order_id'], $this->config->get('everypay_order_status_id'));
 
                 $message = 'Everypay transaction id: ' . $response_array['token'];
-                $this->model_checkout_order->update($this->request->post['merchant_order_id'], $this->config->get('config_order_status_id'), $message, true);
+                $this->model_checkout_order->update($this->request->post['merchant_order_id'], $this->config->get('everypay_order_status_id'), $message, true);
 
                 $this->data['continue'] = $this->url->link('checkout/success');
 
                 $this->renderSuccess();
             } else {
-                $this->data['continue'] = $this->url->link('checkout/failure');
+                $this->data['continue'] = $this->url->link('checkout/checkout');
                 $this->renderFailure();
             }
         } else {
