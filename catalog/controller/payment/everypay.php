@@ -65,7 +65,7 @@ class ControllerPaymentEverypay extends Controller
             $error = '';
 
             try {
-                $phone = str_replace(['+', '-', ' '], null, $order_info['telephone']);
+                $phone = str_replace(array('+', '-', ' '), null, $order_info['telephone']);
                 $ch = $this->getCurlHandle($everypayToken, $amount, $order_info['email'], $phone);
 
                 //execute post
