@@ -54,9 +54,9 @@ class ControllerPaymentEverypay extends Controller
         $this->data['text_failure_wait'] = sprintf($this->language->get('text_failure_wait'), $this->url->link('checkout/checkout', '', 'SSL'));
 
         $this->load->model('checkout/order');
-        if (isset($this->request->request['everypayToken']) && isset($this->request->request['merchant_order_id'])) {
-            $everypayToken = $this->request->request['everypayToken'];
-            $merchant_order_id = $this->request->request['merchant_order_id'];
+        if (isset($this->request->post['everypayToken']) && isset($this->request->post['merchant_order_id'])) {
+            $everypayToken = $this->request->post['everypayToken'];
+            $merchant_order_id = $this->request->post['merchant_order_id'];
 
             $order_info = $this->model_checkout_order->getOrder($merchant_order_id);
             $amount = $this->currency->format($order_info['total'], $order_info['currency_code'], $order_info['currency_value'], false) * 100;
